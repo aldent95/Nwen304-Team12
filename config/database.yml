@@ -79,7 +79,8 @@ test:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
-  #<<: *default
-  #database: Nwen304-Team12_production
-  #username: Nwen304-Team12
+  <<: *default
+  database: Nwen304-Team12_production
+  #username: <%= ENV['NWEN304-TEAM12_DATABASE_USERNAME'] %>
   #password: <%= ENV['NWEN304-TEAM12_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
