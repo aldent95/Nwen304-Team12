@@ -1,0 +1,2 @@
+module MUsersHelper
+end
