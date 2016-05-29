@@ -5,9 +5,10 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+
 </head>
 <body>
-
+<%= debug(params) if Rails.env.development? %>
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -22,6 +23,7 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
+        <%= link_to "Sign up now!", signup_path, class: "btn btn-lg btn-primary" %>
         <li><form><a href="#" class="btn btn-success navbar-btn btn-sm">Login</a></form></li>
       </ul>
     </div>
@@ -30,6 +32,9 @@
 
 
 <div class="container">
+  <% flash.each do |message_type, message| %>
+      <div class="alert alert-<%= message_type %>"><%= message %></div>
+  <% end %>
   <%= yield %>
 </div>
 

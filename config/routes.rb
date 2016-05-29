@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   root 'home#index'
-
+  get "signup" => "m_users#new"
   resources :listings
   resources :m_users
 
