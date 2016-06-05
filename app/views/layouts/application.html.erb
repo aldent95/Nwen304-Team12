@@ -8,7 +8,7 @@
 
 </head>
 <body>
-<%= debug(params) if Rails.env.development? %>
+
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -23,8 +23,8 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
-        <%= link_to "Sign up now!", signup_path, class: "btn btn-lg btn-primary" %>
-        <li><form><a href="#" class="btn btn-success navbar-btn btn-sm">Login</a></form></li>
+        <%= link_to "Sign up now!", signup_path, class: "btn btn-primary" %>
+        <%= link_to "Login", login_path, class: "btn btn-primary" %>
       </ul>
     </div>
   </div>
@@ -37,7 +37,7 @@
   <% end %>
   <%= yield %>
 </div>
-
+<%= debug(params) if Rails.env.development? %>
 
 </body>
 </html>
