@@ -2,6 +2,8 @@ Rails.application.routes.draw do
 
   root 'home#index'
   get "signup" => "m_users#new"
+  get 'profile' => 'm_users#profile'
+  get 'loginrequired' => 'home#login_required'
   get    'login'   => 'logins#new'
   post   'login'   => 'logins#create'
   delete 'logout'  => 'logins#destroy'
