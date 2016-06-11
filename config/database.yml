@@ -78,9 +78,20 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
+
+#production:
+#  <<: *default
+#  database: Nwen304-Team12_production
+#  #username: <%= ENV['NWEN304-TEAM12_DATABASE_USERNAME'] %>
+#  #password: <%= ENV['NWEN304-TEAM12_DATABASE_PASSWORD'] %>
+#  url: <%= ENV['DATABASE_URL'] %>
+
 production:
   <<: *default
-  database: Nwen304-Team12_production
-  #username: <%= ENV['NWEN304-TEAM12_DATABASE_USERNAME'] %>
-  #password: <%= ENV['NWEN304-TEAM12_DATABASE_PASSWORD'] %>
-  url: <%= ENV['DATABASE_URL'] %>
+  adapter: postgresql
+  encoding: unicode
+  database: <%= ENV['RDS_DB_NAME'] %>
+  username: <%= ENV['RDS_USERNAME'] %>
+  password: <%= ENV['RDS_PASSWORD'] %>
+  host: <%= ENV['RDS_HOSTNAME'] %>
+  port: <%= ENV['RDS_PORT'] %>
