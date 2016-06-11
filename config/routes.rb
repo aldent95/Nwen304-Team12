@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
+
   root 'home#index'
   get "signup" => "m_users#new"
+  get    'login'   => 'logins#new'
+  post   'login'   => 'logins#create'
+  delete 'logout'  => 'logins#destroy'
   resources :listings
   resources :m_users
 
