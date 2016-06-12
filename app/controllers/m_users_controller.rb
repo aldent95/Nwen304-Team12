@@ -15,7 +15,13 @@ class MUsersController < ApplicationController
   end
 
 
-
+  def profile
+    if logged_in?
+      render 'profile'
+    else
+      redirect_to '/loginrequired'
+    end
+  end
 
   private
 
