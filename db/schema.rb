@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 20160611235457) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+ActiveRecord::Schema.define(version: 20160616072115) do
 
   create_table "listings", force: :cascade do |t|
     t.integer  "user_id"
@@ -36,6 +37,8 @@ ActiveRecord::Schema.define(version: 20160611235457) do
     t.string   "password_digest"
     t.string   "reset_digest"
     t.datetime "reset_sent_at"
+    t.string   "auth_digest"
+    t.datetime "auth_sent_at"
   end
 
 end
