@@ -1,4 +1,5 @@
 class LoginsController < ApplicationController
+  before_action 'auth_expried?', only: [:destroy]
   def new
   end
 
@@ -9,7 +10,7 @@ class LoginsController < ApplicationController
       render json: {
           status: 200,
           message: "Logged in",
-          data: {"auth":user.auth_digest, "id":user.id}
+          data: {"auth":user.auth_token, "id":user.id}
       }.to_json
       # Log the user in and redirect to the user's show page.
     else
@@ -22,8 +23,11 @@ class LoginsController < ApplicationController
   end
 
   def destroy
-    log_out
-    redirect_to root_url
+    log_out MUser.find(params[:user_id])
+    render json: {
+        status: 200,
+        message: "User Logged out",
+    }.to_json
   end
 
   private

@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   post   'login'   => 'logins#create'
   delete 'logout'  => 'logins#destroy'
   get 'activelistings' => 'listings#active'
+  get 'selleritems' => 'listings#seller'
+  get 'buyeritems' => 'listings#buyer'
   resources :listings
   resources :m_users
 
