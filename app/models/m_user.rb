@@ -27,7 +27,7 @@ class MUser < ActiveRecord::Base
 
   # Returns true if the given token matches the digest.
   def authenticated?(token)
-    :auth_token == token
+    auth_digest == token
   end
 
   def auth_token_expired?
