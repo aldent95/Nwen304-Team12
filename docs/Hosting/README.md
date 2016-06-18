@@ -41,3 +41,8 @@ Then run the script with the following comand.
 $ ./setup.sh
 ```
 This will take around 10 minutes, once this is completed you should have everything installed.
+
+### 2. Webserver: Passenger
+There is not mauch configuration required for Passenger as this is taked care of by NGINX. Passenger is just used to serve the content to NGINX. NGINX is the Component which does all the heavy lifting in this scenario.
+
+### 3. Reverse Proxy: NGINX
