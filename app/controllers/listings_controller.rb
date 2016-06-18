@@ -26,6 +26,10 @@ class ListingsController < ApplicationController
     render json: Listing.all
   end
 
+  def active
+    render json: Listing.where(:purchaser_id => nil)
+  end
+
 
   private
 
