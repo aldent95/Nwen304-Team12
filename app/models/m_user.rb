@@ -26,9 +26,12 @@ class MUser < ActiveRecord::Base
   end
 
   # Returns true if the given token matches the digest.
-  def authenticated?(attribute, token)
-    digest = send("#{attribute}_digest")
-    return false if digest.nil?
-    BCrypt::Password.new(digest).is_password?(token)
+  def authenticated?(token)
+    :auth_token == token
   end
+
+  def auth_token_expired?
+    auth_sent_at < 30.minutes.ago
+  end
+
 end

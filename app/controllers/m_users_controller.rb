@@ -1,4 +1,5 @@
 class MUsersController < ApplicationController
+  before_action 'auth_expried?', only: [:updae]
   def new
     @user = MUser.new
   end
@@ -6,7 +7,6 @@ class MUsersController < ApplicationController
   def create
     @user = MUser.new(user_params)
     if @user.save
-      log_in @user
       render json: {
           status: 200,
           message: "User Successfully Created"
@@ -20,8 +20,41 @@ class MUsersController < ApplicationController
     end
   end
 
+  def show
+
+    render :json => MUser.find(params[:id]), :except => [:password_digest, :auth_digest, :auth_sent_at, :reset_sent_at, :reset_digest]
+  end
+
+  def index
+    render :json => MUser.all, :except => [:password_digest, :auth_digest, :auth_sent_at, :reset_sent_at, :reset_digest]
+  end
 
   private
+
+  def auth_expried?
+    user = MUser.find(params[:id])
+    if user.authenticated?(params[:auth_token])
+      if !user.auth_token_expired?
+        return
+      else
+        render json: {
+            status: 401,
+            message: "Auth token expired, please login again",
+
+        }.to_json
+        return
+      end
+
+    else
+    render json: {
+        status: 401,
+        message: "Incorrect auth token",
+
+    }.to_json
+    return
+    end
+
+  end
 
   def user_params
     params.require(:m_user).permit(:name, :email, :password, :password_confirmation)

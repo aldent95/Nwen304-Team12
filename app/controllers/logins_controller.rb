@@ -9,7 +9,7 @@ class LoginsController < ApplicationController
       render json: {
           status: 200,
           message: "Logged in",
-          data: user.auth_digest
+          data: {"auth":user.auth_digest, "id":user.id}
       }.to_json
       # Log the user in and redirect to the user's show page.
     else
