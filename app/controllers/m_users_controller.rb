@@ -7,21 +7,19 @@ class MUsersController < ApplicationController
     @user = MUser.new(user_params)
     if @user.save
       log_in @user
-      flash[:success] = "Welcome to the NWEN304 Team 12 App!"
-      redirect_to root_path
+      render json: {
+          status: 200,
+          message: "User Successfully Created"
+      }.to_json
     else
-      render 'new'
+      render json: {
+          status: 400,
+          message: "Unable to create new user",
+
+      }.to_json
     end
   end
 
-
-  def profile
-    if logged_in?
-      render 'profile'
-    else
-      redirect_to '/loginrequired'
-    end
-  end
 
   private
 

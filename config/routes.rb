@@ -6,14 +6,12 @@ Rails.application.routes.draw do
 
   root 'home#index'
   get "signup" => "m_users#new"
-  get 'profile' => 'm_users#profile'
-  get 'loginrequired' => 'home#login_required'
+  post 'signup' => 'm_users#create'
   get    'login'   => 'logins#new'
   post   'login'   => 'logins#create'
   delete 'logout'  => 'logins#destroy'
   resources :listings
   resources :m_users
-  resources :password_resets,     only: [:new, :create, :edit, :update]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
