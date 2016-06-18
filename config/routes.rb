@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get    'login'   => 'logins#new'
   post   'login'   => 'logins#create'
   delete 'logout'  => 'logins#destroy'
+  get 'activelistings' => 'listings#active'
   resources :listings
   resources :m_users
 
