@@ -2,7 +2,8 @@ source 'https://rubygems.org'
 
 gem 'passenger'
 
-gem 'bcrypt', '3.1.7'
+gem 'bcrypt', '~> 3.1.8'
+
 
 gem 'bootstrap-sass', '~> 3.2.0'
 gem 'autoprefixer-rails'
@@ -10,6 +11,7 @@ gem 'autoprefixer-rails'
 gem 'rails', '4.2.6'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.15'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -45,7 +47,8 @@ end
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
-
+  gem 'tzinfo-data'
+  gem 'sqlite3'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 end
