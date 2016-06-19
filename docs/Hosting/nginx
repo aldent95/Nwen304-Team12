@@ -1,0 +1,5 @@
+export RDS_HOSTNAME=
+export RDS_USERNAME=
+export RDS_PASSWORD=
+export RAILS_ENV=production
+export SECRET_KEY_BASE=

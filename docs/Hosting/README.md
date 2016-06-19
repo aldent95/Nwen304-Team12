@@ -57,15 +57,26 @@ Now all the dependancies are installed its now time to make the project content 
 ```shell
 $ sudo  chmod 775 *
 ```
+Lastly I you need to generate a secret key for the application to run. To do this run the following command.
+```shell
+$ rake secret
+```
+Save the outputed guid somewhere so it can be inputted later. Next you need to create a secrets.yml with the following comand. The contents of this file can be seen with the provided file in this directory.
+```shell
+$ sudo nano config/secrets.yml
+```
 ### 3. Webserver: Passenger
 There is not mauch configuration required for Passenger as this is taked care of by NGINX. Passenger is just used to serve the content to NGINX. NGINX is the Component which does all the heavy lifting in this scenario.
 
 ### 4. Reverse Proxy: NGINX
+NGINX acts as the conection broker between passenger and the elastic load balencer.
+
+I create a piece of config which enables the conection between passenger and the elb. The following is how and where to create it. You can find the nginx.conf file in this directory.
 
 ```shell
 sudo nano /opt/nginx/conf/nginx.conf
 ```
-
+The config has a few key parts which enables the heavy lifting. The **passenger_root** and **passenger_ruby** under the **http** heading define the location of the passenger server files so when NGINX starts so does Passenger. The first **server** heading defines the listning connection of 80 and the serverd **root** location from the project. The second **server** heading is defined as the redirect. Specifically when the elb gets requests on port 80 they are then forwarded onto port 808 and redirected to the load ballencer as an https request.
 ```
 worker_processes  1;
 events {
@@ -81,7 +92,6 @@ http {
 
     server {
         listen            80;
-        rails_env         production;
         passenger_enabled on;
         root              /opt/Nwen304-Team12/public;
     }
@@ -91,11 +101,16 @@ http {
     }
 }
 ```
+The next piece of config is loading the enviroment variables into Passenger using NGINX. This can be achieved with the following command. You can find the relavent file in this directory.
 
 ```shell
 sudo nano /etc/default/nginx
 ```
-
-```shell
-sudo nano /etc/default/nginx
+In this case the enviroment varibles are for specifying the conection variables to the RDS database server and the rails application enviroment as well as the secret key you generated and saved earlier.
+```
+export RDS_HOSTNAME=
+export RDS_USERNAME=
+export RDS_PASSWORD=
+export RAILS_ENV=production
+export SECRET_KEY_BASE=
 ```
