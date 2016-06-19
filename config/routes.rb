@@ -1,5 +1,13 @@
 Rails.application.routes.draw do
 
+  get 'cart/create'
+
+  get 'cart/update'
+
+  get 'cart/destroy'
+
+  get 'cart/index'
+
   get 'password_resets/new'
 
   get 'password_resets/edit'
@@ -15,6 +23,9 @@ Rails.application.routes.draw do
   get 'buyeritems' => 'listings#buyer'
   resources :listings
   resources :m_users
+  resources :cart
+  delete 'cart' => 'cart#destroy'
+  put 'cart' => 'cart#update'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

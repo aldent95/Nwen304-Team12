@@ -32,4 +32,29 @@ class LoginsController < ApplicationController
 
   private
 
+  def auth_expried?
+    user = MUser.find(params[:user_id])
+    if user.authenticated?(params[:auth_token])
+      if !user.auth_token_expired?
+        return
+      else
+        render json: {
+            status: 401,
+            message: "Auth token expired, please login again",
+
+        }.to_json
+        return
+      end
+
+    else
+      render json: {
+          status: 401,
+          message: "Incorrect auth token",
+
+      }.to_json
+      return
+    end
+
+  end
+
 end

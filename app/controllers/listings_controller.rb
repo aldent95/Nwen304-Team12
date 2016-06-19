@@ -64,11 +64,20 @@ class ListingsController < ApplicationController
             message: "Cannot Purchase your own item"
         }.to_json
       else
-        listing.update_attribute(:purchaser_id, params[:user_id])
-        render json: {
-            status: 200,
-            message: "Item Purchased"
-        }.to_json
+        if params[:payment_type] == nil
+          render json: {
+              status: 400,
+              message: "Missing payment type"
+          }.to_json
+        else
+          listing.update_attribute(:purchaser_id, params[:user_id])
+          listing.update_attribute(:payment_type, params[:payment_type])
+          render json: {
+              status: 200,
+              message: "Item Purchased"
+          }.to_json
+        end
+
       end
 
     else

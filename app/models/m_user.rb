@@ -27,7 +27,12 @@ class MUser < ActiveRecord::Base
 
   # Returns true if the given token matches the digest.
   def authenticated?(token)
+    if auth_digest != nil
     BCrypt::Password.new(auth_digest).is_password?(token)
+    else
+      false
+    end
+
   end
 
   def auth_token_expired?
