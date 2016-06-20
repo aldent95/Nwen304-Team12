@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Nwen304Team12</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 
@@ -43,6 +43,26 @@
 <%= yield %>
 
 <%= debug(params) if Rails.env.development? %>
+
+<script>
+  $(".js-button-logout").on('click', function () {
+    d = {auth_token:getCookie('auth'), user_id:getCookie('id')}
+    $.ajax({
+      type: "DELETE",
+      url: "/logout",
+      data: d,
+      dataType: "json",
+      success: function (responseData, textStatus, jqXHR) {
+        setCookie('auth', '', 200);
+        setCookie('id', '', 200);
+        window.location = '/'
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.log(errorThrown);
+      }
+    })
+  });
+</script>
 
 </body>
 </html>
