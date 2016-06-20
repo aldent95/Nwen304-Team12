@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get 'activelistings' => 'listings#active'
   get 'selleritems' => 'listings#seller'
   get 'buyeritems' => 'listings#buyer'
+  get 'loggedin' => 'logins#auth_expired'
   resources :listings
   resources :m_users
   resources :cart
