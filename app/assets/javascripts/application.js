@@ -49,14 +49,16 @@ $(function() {
 function onload(auth, id){
 
     if(auth != "" && id != ""){
-
-
-        var cb = function(data){
-            $(".js-logged-in-links").removeClass("hide");
-            $(".js-logged-out-links").addClass("hide");
-            $(".js-welcome-user").text("Welcome " +data.data.name + "!");
+        var cb2 = function(){
+            var cb = function(data){
+                $(".js-logged-in-links").removeClass("hide");
+                $(".js-logged-out-links").addClass("hide");
+                $(".js-welcome-user").text("Welcome " +data.data.name + "!");
+            };
+            getUser(id, cb);
         };
-        getUser(id, cb);
+        checkLogin(auth, id, cb2);
+
 
     }
 }
@@ -68,6 +70,25 @@ function getUser(id, callback){
         url: 'm_users/' + id,
         type: "GET",
         dataType: "json",
-        success: callback,
+        success: callback
     });
 }
+
+function checkLogin(auth, id, callback){
+    console.log(id);
+    $.ajax({
+        url: '/loggedin',
+        type: "GET",
+        dataType: "json",
+        data: {auth_token: auth, user_id: id},
+        success: function(data){
+            if(data.status == 200){
+                callback()
+            }
+            else{
+                $(".js-errors").append("<div class='alert alert-danger' role='alert'>" + responseData.message + '</div>');
+            }
+        }
+    });
+}
+

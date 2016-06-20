@@ -29,7 +29,7 @@ class LoginsController < ApplicationController
     }.to_json
   end
 
-  def auth_expried
+  def authexpried
     user = MUser.find(params[:user_id])
     if user.authenticated?(params[:auth_token])
       if !user.auth_token_expired?
