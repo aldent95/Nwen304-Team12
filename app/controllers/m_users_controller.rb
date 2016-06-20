@@ -16,7 +16,7 @@ class MUsersController < ApplicationController
       render json: {
           status: 400,
           message: "Unable to create new user",
-
+          data: @user.errors
       }.to_json
     end
   end
