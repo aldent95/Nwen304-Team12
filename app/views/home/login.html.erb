@@ -2,6 +2,7 @@
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
+    <div class="js-errors"></div>
     <form action="login" method="post">
       <label for="email">Email</label>
       <input type="email" name="email" />
@@ -19,6 +20,7 @@
 <script type="text/javascript">
   $(function() {
     $('form').submit(function(event){
+      $('.js-errors').empty();
       event.preventDefault();
       form = {session:$(this).serializeObject()};
       $.ajax({
@@ -27,9 +29,15 @@
         data: form,
         dataType: "json",
         success: function(responseData, textStatus, jqXHR) {
-          setCookie('auth', responseData.data.auth, 7);
-          setCookie('id', responseData.data.id, 7);
-          window.location = '/'
+          if(responseData.status == 200){
+            setCookie('auth', responseData.data.auth, 7);
+            setCookie('id', responseData.data.id, 7);
+            window.location = '/'
+          }
+          else{
+            $(".js-errors").append("<div class='alert alert-danger' role='alert'>" + responseData.message + '</div>');
+          }
+
         },
         error: function(jqXHR, textStatus, errorThrown) {
           console.log(errorThrown);
