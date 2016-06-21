@@ -1,5 +1,6 @@
 class MUsersController < ApplicationController
-  before_action 'auth_expried?', only: [:updae]
+  before_action 'auth_expried?', only: [:update]
+  require 'json'
   def new
     @user = MUser.new
   end
@@ -15,14 +16,16 @@ class MUsersController < ApplicationController
       render json: {
           status: 400,
           message: "Unable to create new user",
-
+          data: @user.errors
       }.to_json
     end
   end
 
   def show
-
-    render :json => MUser.find(params[:id]), :except => [:password_digest, :auth_digest, :auth_sent_at, :reset_sent_at, :reset_digest]
+    user = MUser.find(params[:id])
+    obj = {name:user.name, email:user.email, id:user.id}
+    msg = { :status_code => "200", :status=>:ok,:success => "success", :data => obj}
+    render json: msg
   end
 
   def index

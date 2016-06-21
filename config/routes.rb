@@ -1,31 +1,25 @@
 Rails.application.routes.draw do
 
-  get 'cart/create'
 
-  get 'cart/update'
-
-  get 'cart/destroy'
-
-  get 'cart/index'
-
-  get 'password_resets/new'
-
-  get 'password_resets/edit'
-
-  root 'home#index'
-  get "signup" => "m_users#new"
+  root 'home#home'
+  get "signup" => "home#signup"
   post 'signup' => 'm_users#create'
-  get    'login'   => 'logins#new'
+  get    'login'   => 'home#login'
   post   'login'   => 'logins#create'
   delete 'logout'  => 'logins#destroy'
   get 'activelistings' => 'listings#active'
   get 'selleritems' => 'listings#seller'
   get 'buyeritems' => 'listings#buyer'
+  get 'loggedin' => 'logins#authexpried'
   resources :listings
   resources :m_users
   resources :cart
   delete 'cart' => 'cart#destroy'
   put 'cart' => 'cart#update'
+  get 'profile' => 'home#profile'
+  get 'home/cart' => 'home#cart'
+  get 'new_item' => 'home#new_item'
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

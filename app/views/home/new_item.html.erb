@@ -1,0 +1,73 @@
+<% provide(:title, 'Sign up') %>
+
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <h1>Sign up</h1>
+    <div class="js-errors"></div>
+    <form action="listings" method="post">
+      <label for="title">Title</label>
+      <input type="text" name="title" />
+
+      <label for="description">Description</label>
+      <textarea name="description"></textarea>
+
+      <label for="category">Category</label>
+      <input type="text" name="category" />
+
+      <label for="imageurl">Image URL</label>
+      <input type="text" name="imageurl" />
+
+      <label for="price">Price</label>
+      <input type="number" name="price" />
+
+      <input type="submit" value="Submit" />
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(function() {
+    $('form').submit(function(event){
+      $('.js-errors').empty();
+      event.preventDefault();
+      form = {listing:$(this).serializeObject(), auth_token: getCookie('auth'), user_id: getCookie('id')};
+      $.ajax({
+        type: "POST",
+        url: "/listings",
+        data: form,
+        dataType: "json",
+        success: function(responseData, textStatus, jqXHR) {
+          if(responseData.status == 200){
+            window.location = '/'
+          }
+          else{
+            $(".js-errors").append("<div class='alert alert-danger' role='alert'>" + responseData.message + '</div>');
+          }
+
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.log(errorThrown);
+        }
+      })
+    });
+  });
+
+  $.fn.serializeObject = function()
+  {
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+      if (o[this.name] !== undefined) {
+        if (!o[this.name].push) {
+          o[this.name] = [o[this.name]];
+        }
+        o[this.name].push(this.value || '');
+      } else {
+        o[this.name] = this.value || '';
+      }
+    });
+    return o;
+  };
+
+</script>

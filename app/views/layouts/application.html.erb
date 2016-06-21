@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Nwen304Team12</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 
@@ -19,32 +19,53 @@
         <span class="icon-bar"></span>
       </button>
       <%= link_to "Nwen 304 Team 12 Marketplace", root_path, class: "navbar-brand" %>
+      <div class="js-logged-in-links hide">
+        <%= link_to 'New Item', new_item_path, class: "btn btn-primary" %>
+      </div>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
-        <% if logged_in?%>
-            <li class="alert alert-info">Welcome <%= current_user.name%></li>
-            <%= link_to "Profile", '/profile', class: "btn btn-primary" %>
-            <%= link_to "Logout", logout_path, method: :delete, class: "btn btn-primary" %>
-      <% else %>
-            <%= link_to "Sign up now!", signup_path, class: "btn btn-primary" %>
-            <%= link_to "Login", login_path, class: "btn btn-primary" %>
-        <% end %>
+        <div class="js-logged-in-links hide">
+          <li class="alert alert-info js-welcome-user"></li>
+          <%= link_to "Profile", 'profile', class: "btn btn-primary" %>
+          <button type="button" class="btn btn-primary js-button-logout">Logout</button>
+        </div>
+
+        <div class="js-logged-out-links">
+          <%= link_to "Sign up now!", 'signup', class: "btn btn-primary" %>
+          <%= link_to "Login", 'login', class: "btn btn-primary" %>
+        </div>
+
 
       </ul>
     </div>
   </div>
 </nav>
 
+<%= yield %>
 
-<div class="container">
-  <% flash.each do |message_type, message| %>
-      <div class="alert alert-<%= message_type %>"><%= message %></div>
-  <% end %>
-  <%= yield %>
-</div>
 <%= debug(params) if Rails.env.development? %>
+
+<script>
+  $(".js-button-logout").on('click', function () {
+    d = {auth_token:getCookie('auth'), user_id:getCookie('id')}
+    $.ajax({
+      type: "DELETE",
+      url: "/logout",
+      data: d,
+      dataType: "json",
+      success: function (responseData, textStatus, jqXHR) {
+        setCookie('auth', '', 200);
+        setCookie('id', '', 200);
+        window.location = '/'
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.log(errorThrown);
+      }
+    })
+  });
+</script>
 
 </body>
 </html>
