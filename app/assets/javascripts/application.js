@@ -86,7 +86,9 @@ function checkLogin(auth, id, callback){
                 callback()
             }
             else{
-                $(".js-errors").append("<div class='alert alert-danger' role='alert'>" + responseData.message + '</div>');
+                $(".js-errors").append("<div class='alert alert-danger' role='alert'>" + data.message + '</div>');
+                setCookie('auth', '', 200);
+                setCookie('id', '', 200);
             }
         }
     });

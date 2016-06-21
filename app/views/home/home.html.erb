@@ -1,4 +1,47 @@
 <h1>HOME PAGE</h1>
 
+<div class="col-md-8 col-md-push-2">
+  <div class="js-errors"></div>
+  <h2>Current Listings</h2>
+  <div class="js-listings-area">
 
-<div class="js-errors"></div>
+  </div>
+</div>
+
+
+<script>
+
+  $(function() {
+    var auth = getCookie("auth");
+    var user_id = getCookie("id");
+    $.ajax({
+      url: '/activelistings',
+      type: "GET",
+      dataType: "json",
+      data: {auth_token: auth, user_id: user_id},
+      success: function(data){
+        listings = data;
+
+        for(i = 0; i < listings.length; i++){
+          var price = parseInt(listings[i].price);
+          price = price.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+          $(".js-listings-area").append("<div class='well'><div class='media'>" +
+                "<div class='pull-left'>" +
+                  "<img class='media-object limit-size' src='" + listings[i].imageurl + "'/>" +
+                "</div>" +
+                "<div class='media-body'>" +
+                  "<h3 class='media-heading'>" + listings[i].title +" (" + listings[i].category + ")</h3>" +
+                  "" + listings[i].description +
+                  "<br>$" + price +
+                  "<div class='js-item-actions' id='" + parseInt(listings[i].id) + "'>" +
+                    "" +
+                  "</div>" +
+                "</div>" +
+              "</div></div>")
+        }
+      }
+    });
+
+  });
+
+</script>
