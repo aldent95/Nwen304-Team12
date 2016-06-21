@@ -21,9 +21,10 @@
       data: {auth_token: auth, user_id: user_id},
       success: function(data){
         listings = data;
-
+        var ids = [];
         for(i = 0; i < listings.length; i++){
           var price = parseInt(listings[i].price);
+          ids.push(parseInt(listings[i].id));
           price = price.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
           $(".js-listings-area").append("<div class='well'><div class='media'>" +
                 "<div class='pull-left'>" +
@@ -38,10 +39,62 @@
                   "</div>" +
                 "</div>" +
               "</div></div>")
+          if(user_id == parseInt(listings[i].user_id)){
+            $("#"+parseInt(listings[i].id)).append("<button class='btn btn-danger' onclick='deleteitem(" + parseInt(listings[i].id) + ")'>Delete item </button>")
+          }
+          else if(getCookie('auth') != '' && getCookie('id') != ''){
+            $("#"+parseInt(listings[i].id)).append("<button class='btn btn-success' onclick='purchaseitem(" + parseInt(listings[i].id) + ", \"paypal\")'>Purchase item with Paypal</button>&nbsp;" +
+                "<button class='btn btn-success' onclick='purchaseitem(" + parseInt(listings[i].id ) + "), \"visa\"'>Purchase item with Visa</button>&nbsp;" +
+                "<button class='btn btn-success' onclick='purchaseitem(" + parseInt(listings[i].id) + ",\"mastercard\")'>Purchase item with Mastercard</button>"
+                )
+          }
         }
       }
     });
 
   });
 
+  function deleteitem(id){
+    $.ajax({
+      type: "DELETE",
+      url: "/listings/"+id,
+      data: {auth_token: getCookie('auth'), user_id:getCookie('id')},
+      dataType: "json",
+      success: function(responseData, textStatus, jqXHR) {
+        if(responseData.status == 200){
+          window.location = '/'
+        }
+        else{
+          $(".js-errors").append("<div class='alert alert-danger' role='alert'>" + responseData.message + '</div>');
+        }
+
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log(errorThrown);
+      }
+    })
+  };
+  function purchaseitem(id, paymentType){
+    console.log(paymentType);
+    d = {auth_token: getCookie('auth'), user_id:getCookie('id'), payment_type: paymentType};
+    console.log(d)
+    $.ajax({
+      type: "PUT",
+      url: "/listings/"+id,
+      data: d,
+      dataType: "json",
+      success: function(responseData, textStatus, jqXHR) {
+        if(responseData.status == 200){
+          window.location = '/'
+        }
+        else{
+          $(".js-errors").append("<div class='alert alert-danger' role='alert'>" + responseData.message + '</div>');
+        }
+
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log(errorThrown);
+      }
+    })
+  };
 </script>
