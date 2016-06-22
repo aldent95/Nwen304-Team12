@@ -38,14 +38,15 @@
                     "" +
                   "</div>" +
                 "</div>" +
-              "</div></div>")
+              "</div></div>");
           if(user_id == parseInt(listings[i].user_id)){
             $("#"+parseInt(listings[i].id)).append("<button class='btn btn-danger' onclick='deleteitem(" + parseInt(listings[i].id) + ")'>Delete item </button>")
           }
           else if(getCookie('auth') != '' && getCookie('id') != ''){
             $("#"+parseInt(listings[i].id)).append("<button class='btn btn-success' onclick='purchaseitem(" + parseInt(listings[i].id) + ", \"paypal\")'>Purchase item with Paypal</button>&nbsp;" +
                 "<button class='btn btn-success' onclick='purchaseitem(" + parseInt(listings[i].id ) + "), \"visa\"'>Purchase item with Visa</button>&nbsp;" +
-                "<button class='btn btn-success' onclick='purchaseitem(" + parseInt(listings[i].id) + ",\"mastercard\")'>Purchase item with Mastercard</button>"
+                "<button class='btn btn-success' onclick='purchaseitem(" + parseInt(listings[i].id) + ",\"mastercard\")'>Purchase item with Mastercard</button>&nbsp;" +
+                "<button class='btn btn-info' onclick='addToCart(" + parseInt(listings[i].id) + ")'>Add to Cart</button>"
                 )
           }
         }
@@ -55,6 +56,7 @@
   });
 
   function deleteitem(id){
+    $(".js-errors").empty();
     $.ajax({
       type: "DELETE",
       url: "/listings/"+id,
@@ -75,9 +77,9 @@
     })
   };
   function purchaseitem(id, paymentType){
+    $(".js-errors").empty();
     console.log(paymentType);
     d = {auth_token: getCookie('auth'), user_id:getCookie('id'), payment_type: paymentType};
-    console.log(d)
     $.ajax({
       type: "PUT",
       url: "/listings/"+id,
@@ -86,6 +88,28 @@
       success: function(responseData, textStatus, jqXHR) {
         if(responseData.status == 200){
           window.location = '/'
+        }
+        else{
+          $(".js-errors").append("<div class='alert alert-danger' role='alert'>" + responseData.message + '</div>');
+        }
+
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log(errorThrown);
+      }
+    })
+  };
+  function addToCart(id){
+    $(".js-errors").empty();
+    d = {auth_token: getCookie('auth'), user_id:getCookie('id'), item_id: id};
+    $.ajax({
+      type: "POST",
+      url: "/cart",
+      data: d,
+      dataType: "json",
+      success: function(responseData, textStatus, jqXHR) {
+        if(responseData.status == 200){
+          window.location = '/home/cart'
         }
         else{
           $(".js-errors").append("<div class='alert alert-danger' role='alert'>" + responseData.message + '</div>');

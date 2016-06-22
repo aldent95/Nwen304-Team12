@@ -21,6 +21,7 @@
       <%= link_to "Nwen 304 Team 12 Marketplace", root_path, class: "navbar-brand" %>
       <div class="js-logged-in-links hide">
         <%= link_to 'New Item', new_item_path, class: "btn btn-primary" %>
+        <%= link_to 'Cart', 'home/cart', class: "btn btn-primary" %>
       </div>
     </div>
 
@@ -28,13 +29,13 @@
       <ul class="nav navbar-nav navbar-right">
         <div class="js-logged-in-links hide">
           <li class="alert alert-info js-welcome-user"></li>
-          <%= link_to "Profile", 'profile', class: "btn btn-primary" %>
+          <%= link_to "Profile", '/profile', class: "btn btn-primary" %>
           <button type="button" class="btn btn-primary js-button-logout">Logout</button>
         </div>
 
         <div class="js-logged-out-links">
-          <%= link_to "Sign up now!", 'signup', class: "btn btn-primary" %>
-          <%= link_to "Login", 'login', class: "btn btn-primary" %>
+          <%= link_to "Sign up now!", '/signup', class: "btn btn-primary" %>
+          <%= link_to "Login", '/login', class: "btn btn-primary" %>
         </div>
 
 

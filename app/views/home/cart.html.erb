@@ -1,0 +1,101 @@
+
+
+<div class="col-md-8 col-md-push-2">
+  <h1>Your Cart</h1>
+  <button class='btn btn-success' onclick='purchaseCart("paypal")'>Purchase cart with Paypal</button>&nbsp;
+  <button class='btn btn-success' onclick='purchaseCart("visa")'>Purchase cart with Visa</button>&nbsp;
+  <button class='btn btn-success' onclick='purchaseCart("mastercard")'>Purchase cart with Mastercard</button>
+  <div class="js-errors"></div>
+  <div class="js-listings-area">
+
+  </div>
+</div>
+
+<script>
+
+  $(function() {
+    var auth = getCookie("auth");
+    var user_id = getCookie("id");
+    $.ajax({
+      url: '/cart',
+      type: "GET",
+      dataType: "json",
+      data: {auth_token: auth, user_id: user_id},
+      success: function(data){
+        var ids = data;
+        for(i = 0; i < ids.length; i++){
+          $.ajax({
+            url: '/listings/' + ids[i].item_id,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+              listing = data
+              var price = parseInt(listing.price);
+              ids.push(parseInt(listing.id));
+              price = price.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+              $(".js-listings-area").append("<div class='well'><div class='media'>" +
+                  "<div class='pull-left'>" +
+                  "<img class='media-object limit-size' src='" + listing.imageurl + "'/>" +
+                  "</div>" +
+                  "<div class='media-body'>" +
+                  "<h3 class='media-heading'>" + listing.title + " (" + listing.category + ")</h3>" +
+                  "" + listing.description +
+                  "<br>$" + price +
+                  "<div class='js-item-actions' id='" + parseInt(listing.id) + "'>" +
+                  "" +
+                  "</div>" +
+                  "</div>" +
+                  "</div></div>");
+              $("#" + parseInt(listing.id)).append("<button class='btn btn-warning' onclick='deleteitem(" + parseInt(listing.id) + ")'>Remove Item from cart</button>")
+            }
+          });
+
+        }
+      }
+    });
+
+  });
+
+  function deleteitem(id){
+    $.ajax({
+      type: "DELETE",
+      url: "/cart",
+      data: {auth_token: getCookie('auth'), user_id:getCookie('id'), item_id: id},
+      dataType: "json",
+      success: function(responseData, textStatus, jqXHR) {
+        if(responseData.status == 200){
+          window.location = '/home/cart'
+        }
+        else{
+          $(".js-errors").append("<div class='alert alert-danger' role='alert'>" + responseData.message + '</div>');
+        }
+
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log(errorThrown);
+      }
+    })
+  };
+  function purchaseCart(paymentType){
+    console.log(paymentType);
+    d = {auth_token: getCookie('auth'), user_id:getCookie('id'), payment_type: paymentType};
+    $.ajax({
+      type: "PUT",
+      url: "/cart",
+      data: d,
+      dataType: "json",
+      success: function(responseData, textStatus, jqXHR) {
+        if(responseData.status == 200){
+          window.location = '/home/cart'
+        }
+        else{
+          $(".js-errors").append("<div class='alert alert-danger' role='alert'>" + responseData.message + '</div>');
+        }
+
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log(errorThrown);
+      }
+    })
+  };
+</script>
