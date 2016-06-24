@@ -2,10 +2,17 @@ class CartController < ApplicationController
   before_action 'auth_expried?'
   def create
     @cart = Cart.new({:user_id => params[:user_id], :item_id => params[:item_id]})
-    if @cart.save
+
+    if Cart.where(:user_id => params[:user_id], :item_id => params[:item_id]).length == 0 and @cart.save
       render json: {
           status: 200,
           message: "Item Successfully Added to cart"
+      }.to_json
+    elsif not Cart.where(:user_id => params[:user_id], :item_id => params[:item_id]).length == 0
+      render json: {
+          status: 400,
+          message: "Item already in cart",
+
       }.to_json
     else
       render json: {

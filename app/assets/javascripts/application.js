@@ -67,7 +67,7 @@ function onload(auth, id){
 function getUser(id, callback){
     console.log(id);
     $.ajax({
-        url: 'm_users/' + id,
+        url: '/m_users/' + id,
         type: "GET",
         dataType: "json",
         success: callback
@@ -89,6 +89,7 @@ function checkLogin(auth, id, callback){
                 $(".js-errors").append("<div class='alert alert-danger' role='alert'>" + data.message + '</div>');
                 setCookie('auth', '', 200);
                 setCookie('id', '', 200);
+                window.location ='/';
             }
         }
     });

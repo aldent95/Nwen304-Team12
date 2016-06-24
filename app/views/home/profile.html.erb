@@ -1,0 +1,108 @@
+
+
+<div class="col-md-4 col-md-push-2">
+  <h1>Your Sales</h1>
+  <div class="js-errors"></div>
+  <div class="js-sales-area">
+
+  </div>
+</div>
+<div class="col-md-4 col-md-push-2">
+  <h1>Your Purchases</h1>
+  <div class="js-errors"></div>
+  <div class="js-purcahsed-area">
+
+  </div>
+</div>
+
+<script>
+
+  $(function() {
+    var auth = getCookie("auth");
+    var user_id = getCookie("id");
+    $.ajax({
+      url: '/selleritems',
+      type: "GET",
+      dataType: "json",
+      data: {auth_token: auth, user_id: user_id},
+      success: function(data){
+        console.log(data)
+        var listings = data;
+        for(i = 0; i < listings.length; i++){
+              var price = parseInt(listings[i].price);
+              price = price.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+              $(".js-sales-area").append("<div class='well'><div class='media'>" +
+                  "<div class='pull-left'>" +
+                  "<img class='media-object limit-size' src='" + listings[i].imageurl + "'/>" +
+                  "</div>" +
+                  "<div class='media-body'>" +
+                  "<h3 class='media-heading'>" + listings[i].title + " (" + listings[i].category + ")</h3>" +
+                  "" + listings[i].description +
+                  "<br>$" + price +
+                  "<div class='js-item-actions' id='" + parseInt(listings[i].id) + "'>" +
+                  "" +
+                  "</div>" +
+                  "</div>" +
+                  "</div></div>");
+              if(listings[i].purchaser_id == null){
+                $("#" + parseInt(listings[i].id)).append("<button class='btn btn-warning' onclick='deleteitem(" + parseInt(listings[i].id) + ")'>Delete Item</button>")
+              }
+              else{
+                $("#" + parseInt(listings[i].id)).append("<h3>Sold!</h3>")
+              }
+
+            }
+          }
+    });
+
+    $.ajax({
+      url: '/buyeritems',
+      type: "GET",
+      dataType: "json",
+      data: {auth_token: auth, user_id: user_id},
+      success: function(data){
+        var listings = data;
+        for(i = 0; i < listings.length; i++){
+          var price = parseInt(listings[i].price);
+          price = price.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+          $(".js-purcahsed-area").append("<div class='well'><div class='media'>" +
+              "<div class='pull-left'>" +
+              "<img class='media-object limit-size' src='" + listings[i].imageurl + "'/>" +
+              "</div>" +
+              "<div class='media-body'>" +
+              "<h3 class='media-heading'>" + listings[i].title + " (" + listings[i].category + ")</h3>" +
+              "" + listings[i].description +
+              "<br>$" + price +
+              "<div class='js-item-actions' id='" + parseInt(listings[i].id) + "'>" +
+              "" +
+              "</div>" +
+              "</div>" +
+              "</div></div>");
+
+        }
+      }
+    });
+
+  });
+
+  function deleteitem(id){
+    $.ajax({
+      type: "DELETE",
+      url: "/cart",
+      data: {auth_token: getCookie('auth'), user_id:getCookie('id'), item_id: id},
+      dataType: "json",
+      success: function(responseData, textStatus, jqXHR) {
+        if(responseData.status == 200){
+          window.location = '/home/cart'
+        }
+        else{
+          $(".js-errors").append("<div class='alert alert-danger' role='alert'>" + responseData.message + '</div>');
+        }
+
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log(errorThrown);
+      }
+    })
+  };
+</script>
