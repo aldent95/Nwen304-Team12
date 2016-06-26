@@ -16,7 +16,6 @@ I created an EC2 instance with Ubuntu Server 14.04. I gave the instance a 15gb g
 |-----|----|
 |TCP  |8080|  
 |HTTP |80  |
-|HTTPS|443 |
 |SSH  |22  |
 
 All other setings were kept as default until the section for using or creating your own key pair which is essential for remote managment via ssh. Once the key pair is created and selected as part of the config it is downloaded onto the computer you are using to access the AWS console.
@@ -129,5 +128,32 @@ export RAILS_ENV=production
 export SECRET_KEY_BASE=
 ```
 ### 5. Loadbalencer: Amazon ELB
+The main purpose of the ELB in this case is to do the SSL termination so that the webserver doesnt need to do the decryption of every request which is computationally intensive if a webserver is recieving 100 to 1000's of concurrent requests. It was also given used to show the ability of scalling up instances based on demand meaning using auto scalling the load ballencer could distibute requests over multiple instances.
 
-### 6. Automating Code Deployment: Cron Job
+The elb was configured with tthe following security group.
+
+|Type |Port|
+|-----|----|
+|TCP  |443 |  
+|HTTP |80  |
+|SSH  |22  |
+
+The elb was configured with the following listners. The listners are way of configuring port redirection to the web server as well as hosting a SSL certificate to do SSL termination. The certificate which was generated in the AWS Certificate Manager is tied to the HTTPS listner.
+
+| Load Balancer   Protocol | Load Balancer Port | Instance Protocol | Instance Port |
+|--------------------------|--------------------|-------------------|---------------|
+| HTTP                     | 80                 | HTTP              | 8080          |
+| HTTPS                    | 443                | HTTP              | 80                         |
+The elb health check was set to the following. The health check does a periodic get request in this case on the root url to check the avalability of the ec2 instance.
+
+| Ping Target         | HTTP:80/   |
+|---------------------|------------|
+| Timeout             | 5 seconds  |
+| Interval            | 30 seconds |
+| Unhealthy threshold | 2          |
+| Healthy threshold   | 10         |
+
+The elb was configured with the instance we setup earlier.
+
+### 6. Automating Code Deployment and Intergration: Cron Job
+I wanted to create an automated method for doing Continuous integration and Continuous deployment. Whats this means is not having to log into the instance and pull down the code and reconfigure the settings every time there is a change. What I did was create a cron job with a bash script. The script can be seen bellow as well as in the directory. The scipt is called **cicd.sh**.
