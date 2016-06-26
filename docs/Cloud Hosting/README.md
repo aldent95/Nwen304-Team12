@@ -157,3 +157,18 @@ The elb was configured with the instance we setup earlier.
 
 ### 6. Automating Code Deployment and Intergration: Cron Job
 I wanted to create an automated method for doing Continuous integration and Continuous deployment. Whats this means is not having to log into the instance and pull down the code and reconfigure the settings every time there is a change. What I did was create a cron job with a bash script. The script can be seen bellow as well as in the directory. The scipt is called **cicd.sh**.
+
+```shell
+#!/bin/sh
+cd /opt/Nwen304-Team12/   # changing to the webserving directory/repo
+sudo git stash -u   # stashing non esential changes
+sudo git pull   # pulling lattedt changes from repo
+export RDS_HOSTNAME=    # enviroment varible for Database Hostname
+export RDS_USERNAME=    # enviroment varible for Database Username
+export RDS_PASSWORD=    # enviroment varible for Database Password
+export RAILS_ENV=production   # enviroment varible for ruby on rails runtime
+sudo bundle install   # updates gems
+sudo rake assets:clobber assets:precompile RAILS_ENV=production # deletes old precompiled assets and creates new ones
+rake db:migrate   # does latest database migrations
+sudo service nginx restart  # restarts NGINX
+```
