@@ -43,6 +43,9 @@ class ListingsController < ApplicationController
     listing = Listing.find(params[:id])
     if listing.purchaser_id == nil
       listing.destroy
+      Cart.where(item_id: listing.id).each do |cart|
+        cart.destroy
+      end
       render json: {
           status: 200,
           message: "Listing deleted"
@@ -72,6 +75,9 @@ class ListingsController < ApplicationController
         else
           listing.update_attribute(:purchaser_id, params[:user_id])
           listing.update_attribute(:payment_type, params[:payment_type])
+          Cart.where(item_id: listing.id).each do |cart|
+            cart.destroy
+          end
           render json: {
               status: 200,
               message: "Item Purchased"
