@@ -39,12 +39,6 @@ function getCookie(cname) {
     return "";
 }
 
-$(function() {
-    var auth = getCookie("auth");
-    var user_id = getCookie("id");
-
-    onload(auth, user_id);
-});
 
 function onload(auth, id){
 
@@ -93,5 +87,13 @@ function checkLogin(auth, id, callback){
             }
         }
     });
+}
+
+
+function onPageLoad(){
+    var auth = getCookie("auth");
+    var user_id = getCookie("id");
+
+    onload(auth, user_id);
 }
 

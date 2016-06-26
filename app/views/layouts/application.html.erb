@@ -49,6 +49,9 @@
 <%= debug(params) if Rails.env.development? %>
 
 <script>
+  $(function(){
+    onPageLoad();
+  });
   $(".js-button-logout").on('click', function () {
     d = {auth_token:getCookie('auth'), user_id:getCookie('id')}
     $.ajax({
