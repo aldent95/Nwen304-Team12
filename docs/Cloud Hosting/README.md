@@ -1,6 +1,8 @@
 # Cloud Hosting
 We decided we were going to do Ruby on Rails app so we decided that AWS(Amazon Web Services) would be the best place to host it.
 
+All files referenced in this file can be found https://github.com/aldent95/Nwen304-Team12/tree/master/docs/Cloud%20Hosting.
+
 ### Components of Hosting
 1. Webserver Host: Amazon EC2
 2. Code Setup
