@@ -3,7 +3,7 @@ We decided we were going to do Ruby on Rails app so we decided that AWS(Amazon W
 
 ### Components of Hosting
 1. Webserver Host: Amazon EC2
-2. Code Setup: Git Clone
+2. Code Setup
 3. Webserver: Passenger
 4. Reverse Proxy: NGINX
 5. Loadbalencer: Amazon ELB
@@ -42,7 +42,7 @@ $ ./setup.sh
 ```
 This will take around 10 minutes, once this is completed you should have everything installed.
 
-### 2. Code Setup: Git Clone
+### 2. Code Setup
 Now its time to setup the code to run. Firstly you are gonna want to git clone the repo down from GitHub into the webserving directory. see following.
 ```shell
 $ cd /opt
@@ -114,3 +114,5 @@ export RDS_PASSWORD=
 export RAILS_ENV=production
 export SECRET_KEY_BASE=
 ```
+### 5. Loadbalencer: Amazon ELB
+### 6. Automating Code Deployment: Cron Job
