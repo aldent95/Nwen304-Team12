@@ -156,7 +156,7 @@ The elb health check was set to the following. The health check does a periodic 
 The elb was configured with the instance we setup earlier.
 
 ### 6. Automating Code Deployment and Intergration: Cron Job
-I wanted to create an automated method for doing Continuous integration and Continuous deployment. Whats this means is not having to log into the instance and pull down the code and reconfigure the settings every time there is a change. What I did was create a cron job with a bash script. The script can be seen bellow as well as in the directory. The scipt is called **cicd.sh**.
+I wanted to create an automated method for doing Continuous integration and Continuous deployment. Whats this means is not having to log into the instance and pull down the code and reconfigure the settings every time there is a change. What I did was create a cron job with a bash script. The script can be seen bellow as well as in the directory. The scipt is called **cicd.sh**. The job was configured to run every 5 minutes.
 
 ```shell
 #!/bin/sh
@@ -171,4 +171,8 @@ sudo bundle install   # updates gems
 sudo rake assets:clobber assets:precompile RAILS_ENV=production # deletes old precompiled assets and creates new ones
 rake db:migrate   # does latest database migrations
 sudo service nginx restart  # restarts NGINX
+```
+When setting up the cron jobmake sure to set the script to executable see following.
+```shell
+$ sudo chmod +x cicd.sh
 ```
