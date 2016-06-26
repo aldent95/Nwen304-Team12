@@ -1,0 +1,2 @@
+# SSL
+I requested an SSL certificate from the Amazon Certificate Manager. This required to authenticate my domain **nwen304group12.zsys.eu** which is hosted on google DNS and is a CNAME record pointing to the ELB URL **NWEN304Team12-140766688.ap-southeast-2.elb.amazonaws.com**. Once I had autenticated my domain it gave me a genuine certificate which I then configured onto the ELB's HTTPS listner so that the ELB can dom the SSL offload so that the web server does  not need to. This make all comunications with the application encrypted.
